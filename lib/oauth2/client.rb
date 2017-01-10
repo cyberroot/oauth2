@@ -165,8 +165,11 @@ module OAuth2
 
       Rails.logger.info "====================== response.parsed"
       Rails.logger.info response.parsed
+      Rails.logger.info response.parsed.is_a?
+      Rails.logger.info response.parsed.is_a?(Hash)
+      Rails.logger.info response.parsed['access_token']
       Rails.logger.info "====================== response.parsed"
-      
+
       if options[:raise_errors] && !(response.parsed.is_a?(Hash) && response.parsed['access_token'])
         error = Error.new(response)
         raise(error)
