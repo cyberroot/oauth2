@@ -101,6 +101,10 @@ module OAuth2
       end
       response = Response.new(response, :parse => opts[:parse])
 
+      Rails.logger.info "======================"
+      Rails.logger.info response
+      Rails.logger.info "======================"
+
       case response.status
       when 301, 302, 303, 307
         opts[:redirect_count] ||= 0
