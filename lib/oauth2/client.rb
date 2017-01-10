@@ -99,18 +99,7 @@ module OAuth2
       response = connection.run_request(verb, url, opts[:body], opts[:headers]) do |req|
         yield(req) if block_given?
       end
-      
-      Rails.logger.info "======================"
-      Rails.logger.info response
-      Rails.logger.info "======================"
-
       response = Response.new(response, :parse => opts[:parse])
-
-      Rails.logger.info "======================"
-      Rails.logger.info response.headers
-      Rails.logger.info response.body
-      Rails.logger.info response.status
-      Rails.logger.info "======================"
 
       case response.status
       when 301, 302, 303, 307
