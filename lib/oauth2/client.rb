@@ -114,6 +114,7 @@ module OAuth2
 
       case response.status
       when 301, 302, 303, 307
+        Rails.logger.info "====================== 1"
         opts[:redirect_count] ||= 0
         opts[:redirect_count] += 1
         return response if opts[:redirect_count] > options[:max_redirects]
@@ -123,14 +124,17 @@ module OAuth2
         end
         request(verb, response.headers['location'], opts)
       when 200..299, 300..399
+        Rails.logger.info "====================== 2"
         # on non-redirecting 3xx statuses, just return the response
         response
       when 400..599
+        Rails.logger.info "====================== 3"
         error = Error.new(response)
         raise(error) if opts.fetch(:raise_errors, options[:raise_errors])
         response.error = error
         response
       else
+        Rails.logger.info "====================== 4"
         error = Error.new(response)
         raise(error, "Unhandled status code value of #{response.status}")
       end
@@ -145,6 +149,9 @@ module OAuth2
     def get_token(params, access_token_opts = {}, access_token_class = AccessToken) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
       params = Authenticator.new(id, secret, options[:auth_scheme]).apply(params)
       opts = {:raise_errors => options[:raise_errors], :parse => params.delete(:parse)}
+      Rails.logger.info "====================== opts"
+      Rails.logger.info opts
+      Rails.logger.info "====================== opts"
       headers = params.delete(:headers) || {}
       if options[:token_method] == :post
         opts[:body] = params
@@ -155,6 +162,11 @@ module OAuth2
       end
       opts[:headers].merge!(headers)
       response = request(options[:token_method], token_url, opts)
+
+      Rails.logger.info "====================== response.parsed"
+      Rails.logger.info response.parsed
+      Rails.logger.info "====================== response.parsed"
+      
       if options[:raise_errors] && !(response.parsed.is_a?(Hash) && response.parsed['access_token'])
         error = Error.new(response)
         raise(error)
