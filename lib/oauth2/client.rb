@@ -96,6 +96,14 @@ module OAuth2
 
       url = connection.build_url(url, opts[:params]).to_s
 
+      Rails.logger.info "======================"
+      Rails.logger.info "request"
+      Rails.logger.info url
+      Rails.logger.info verb
+      Rails.logger.info opts[:body]
+      Rails.logger.info opts[:headers]
+      Rails.logger.info "======================"
+
       response = connection.run_request(verb, url, opts[:body], opts[:headers]) do |req|
         yield(req) if block_given?
       end
