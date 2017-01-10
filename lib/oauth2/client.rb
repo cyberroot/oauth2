@@ -109,7 +109,9 @@ module OAuth2
       end
       
       Rails.logger.info "======================"
+      Rails.logger.info "response"
       Rails.logger.info response
+      Rails.logger.info response.body
       Rails.logger.info "======================"
 
       response = Response.new(response, :parse => opts[:parse])
